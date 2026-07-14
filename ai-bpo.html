@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一人でやっていた業務を、AIに渡した記録 — 荒川</title>
+<meta name="description" content="ChatGPTで作った資料を、結局手で直している。その理由と、直し方。実際に毎日動いている自動化の現物。">
+<meta name="robots" content="noindex">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --bg:#0C0D10;
+    --bg-up:#131519;
+    --line:#22262E;
+    --line-soft:#1A1D23;
+    --cold:#67758A;
+    --cold-dim:#3B434F;
+    --warm:#EFE6DA;
+    --warm-dim:#9A9285;
+    --brass:#E0AE6B;
+    --brass-dim:#7A5E38;
+    --break:#C4675E;
+    --f-min:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+    --f-got:"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#F6F4F0; --bg-up:#FFFFFF; --line:#DFDAD2; --line-soft:#EBE7E1;
+      --cold:#8C97A6; --cold-dim:#B9C0C9;
+      --warm:#1E2026; --warm-dim:#6C6A78;
+      --brass:#9A6B24; --brass-dim:#D9BE93;
+      --break:#B0483E;
+    }
+  }
+
+  body{
+    background:var(--bg); color:var(--warm);
+    font-family:var(--f-got); font-size:16px; line-height:1.9;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 clamp(20px,5vw,48px); }
+  ::selection{ background:var(--brass); color:var(--bg); }
+  /* 日本語の禁則は効かせるが、折り返しは殺さない（狭い幅で右端が切れるため） */
+  body{ line-break:strict; overflow-wrap:break-word; }
+  .grid > *{ min-width:0; }
+
+  /* ── HERO ── */
+  .hero{ padding:clamp(76px,13vh,140px) 0 clamp(56px,9vh,96px); }
+  .kicker{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.24em;
+    color:var(--cold); margin-bottom:clamp(40px,7vh,68px);
+  }
+  .quote{
+    margin-bottom:clamp(30px,4.5vh,44px);
+    border-left:2px solid var(--cold-dim); padding-left:clamp(18px,2.5vw,28px);
+    font-family:var(--f-min); color:var(--cold);
+    font-size:clamp(16px,2.3vw,24px); line-height:1.95;
+  }
+  .quote cite{ display:block; margin-top:14px; font-family:var(--f-mono); font-style:normal;
+    font-size:11px; letter-spacing:.1em; color:var(--cold-dim); }
+  .verdict{
+    font-family:var(--f-min); font-weight:600;
+    font-size:clamp(19px,3.6vw,40px); line-height:1.7; letter-spacing:.01em;
+  }
+  .verdict em{ font-style:normal; color:var(--brass); }
+  .lead{
+    margin-top:clamp(34px,5.5vh,52px); padding-top:26px; border-top:1px solid var(--line);
+    color:var(--warm-dim); font-size:16.5px; line-height:2.1; max-width:34em;
+  }
+  .lead u{ text-decoration:none; color:var(--warm); border-bottom:1px solid var(--brass); padding-bottom:2px; }
+
+  /* ── セクション ── */
+  section{ padding:clamp(56px,9vh,96px) 0; border-top:1px solid var(--line-soft); }
+  h2{
+    font-family:var(--f-min); font-weight:600;
+    font-size:clamp(21px,3vw,31px); line-height:1.65; margin-bottom:clamp(22px,3.5vh,34px);
+  }
+  h2 em{ font-style:normal; color:var(--brass); }
+  p{ margin-bottom:1.35em; max-width:40em; }
+  p:last-child{ margin-bottom:0; }
+  .muted{ color:var(--warm-dim); }
+  strong{ font-weight:600; color:var(--brass); }
+
+  /* ── 動いているもの（非対称） ── */
+  .works{ margin-top:clamp(28px,4vh,40px); }
+  .work{ padding:clamp(24px,3.5vh,34px) 0; border-top:1px solid var(--line-soft); }
+  .work:first-child{ border-top:0; }
+  .work .head{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:12px; }
+  .work h3{ font-family:var(--f-min); font-size:clamp(17px,2.2vw,22px); font-weight:600; }
+  .work .tag{
+    font-family:var(--f-mono); font-size:10.5px; letter-spacing:.12em;
+    color:var(--brass-dim); border:1px solid var(--brass-dim); padding:2px 8px; border-radius:2px;
+  }
+  .work p{ color:var(--warm-dim); font-size:15.5px; }
+  .work .now{
+    margin-top:14px; font-family:var(--f-mono); font-size:12.5px; color:var(--cold);
+    background:var(--bg-up); border-left:2px solid var(--brass-dim);
+    padding:10px 14px; line-height:1.85; max-width:none;
+  }
+
+  /* 主役：この応募自体が出力 */
+  .work.lead-work{ background:var(--bg-up); padding:clamp(26px,4vh,38px) clamp(20px,3vw,30px); border-top:0; }
+  .work.lead-work h3{ font-size:clamp(19px,2.6vw,26px); }
+  .work.lead-work p{ color:var(--warm); }
+
+  /* ── 正直に ── */
+  .honest li{
+    list-style:none; padding:14px 0 14px 26px; border-top:1px solid var(--line-soft);
+    color:var(--warm-dim); font-size:15.5px; position:relative; max-width:42em;
+  }
+  .honest li:first-child{ border-top:0; }
+  .honest li::before{ content:"×"; position:absolute; left:0; top:14px; color:var(--break); font-family:var(--f-mono); }
+  .honest li b{ color:var(--warm); font-weight:600; }
+
+  /* ── 30日 ── */
+  .plan{ counter-reset:step; margin-top:8px; }
+  .plan li{
+    list-style:none; counter-increment:step; position:relative;
+    padding:16px 0 16px 46px; border-top:1px solid var(--line-soft); max-width:42em;
+  }
+  .plan li:first-child{ border-top:0; }
+  .plan li::before{
+    content:counter(step); position:absolute; left:0; top:12px;
+    font-family:var(--f-min); font-size:26px; color:var(--brass-dim); line-height:1;
+  }
+  .plan li b{ display:block; color:var(--warm); font-weight:600; margin-bottom:3px; }
+  .plan li span{ color:var(--warm-dim); font-size:15px; }
+
+  /* ── 締め ── */
+  .close{ padding:clamp(64px,10vh,110px) 0 clamp(80px,13vh,130px); border-top:1px solid var(--line); }
+  .close .verdict{ font-size:clamp(18px,3vw,32px); }
+  .sig{ margin-top:clamp(30px,5vh,48px); font-family:var(--f-mono); font-size:12px;
+    letter-spacing:.1em; color:var(--cold); line-height:2.2; }
+  .sig a{ color:var(--brass); text-decoration:none; border-bottom:1px solid var(--brass-dim); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">(株)KeyHearts ／ 生成AI・業務自動化パートナー 応募</div>
+
+  <blockquote class="quote">
+    現在はChatGPTなどを活用していますが、思うような資料にならず、<br>
+    最終的には手作業で修正している状態です。
+    <cite>— 募集文より</cite>
+  </blockquote>
+
+  <p class="verdict">
+    これは、<em>プロンプトが下手だから</em>ではありません。<br>
+    AIが、御社を知らないからです。
+  </p>
+
+  <p class="lead">
+    AIは平均しか書けません。御社の顧客の名前も、去年の失注理由も、代表が商談で実際に使っている言い回しも、
+    ChatGPTは持っていない。だから「一般的に正しい資料」が出てくる。手で直す作業が残るのは、
+    <u>当たり前のこと</u>です。
+  </p>
+</header>
+
+<section>
+  <h2>直し方は、プロンプトを磨くことではありません</h2>
+  <p>
+    AIに渡す<strong>素材</strong>を、仕組みとして貯めることです。過去に受注した提案書、失注したときの理由、
+    代表が実際に話している言葉、顧客からの返信。この会社にしかない事実を、AIが読める場所に置く。
+    そこから作らせると、手直しは減ります。
+  </p>
+  <p class="muted">
+    順番が逆になっている現場をよく見ます。プロンプトを工夫し、テンプレートを整え、それでも直しが消えない。
+    素材が空のまま、書かせ方だけを磨いているからです。
+  </p>
+</section>
+
+<section>
+  <h2>私も、一人で全部やっていました</h2>
+  <p>
+    営業、資料作成、SNS、分析、経理。募集文に書かれていた状況と、ほとんど同じです。
+    2週間前、それを全部AIに渡しました。以下は、<strong>今この瞬間も動いているもの</strong>です。
+    構想でも、練習でもありません。
+  </p>
+
+  <div class="works">
+
+    <article class="work lead-work">
+      <div class="head">
+        <h3>営業の自動化</h3>
+        <span class="tag">この応募が、その出力です</span>
+      </div>
+      <p>
+        クラウドワークスとランサーズの案件を自動で集め、募集文から危険な案件（勧誘・詐欺の型）をふるい落とし、
+        条件と相性でスコアを付けて、提案文の下書きまで作ります。人がやるのは、送信ボタンだけ。
+      </p>
+      <p>
+        <strong>御社の募集を見つけたのも、この仕組みです。</strong>今このページを読んでいることが、動作確認になっています。
+      </p>
+      <div class="now">現在 241件の案件を保持／応募期限の切れたものは自動で除外<br>「応募できない案件が3割混ざる」不具合を7/14に修正済み</div>
+    </article>
+
+    <article class="work">
+      <div class="head">
+        <h3>SNS運用の自動化</h3>
+        <span class="tag">募集文 ③</span>
+      </div>
+      <p>
+        Threadsで、投稿の生成・予約・投稿・数字の収集・分析・次の投稿への反映までを回しています。毎日3回。
+        私のPCの電源に依存しないよう、クラウド（GitHub Actions）へ移しました。
+      </p>
+      <div class="now">7/11・7/12は私のPCが落ちていて投稿ゼロだった → クラウドへ移設<br>移設先でも止まったので、PC側からも叩く二重化を追加（7/15）</div>
+    </article>
+
+    <article class="work">
+      <div class="head">
+        <h3>分析とレポートの自動化</h3>
+        <span class="tag">募集文 ②</span>
+      </div>
+      <p>
+        投稿ごとの表示数・返信数を毎日集め、伸びた投稿の共通点を出します。日次レポートは自動でDiscordに届きます。
+        数字を人が拾いに行く時間は、ゼロになりました。
+      </p>
+      <p class="muted">
+        この仕組みが3日間止まっていたことがあります。気づかず「伸びていない」と報告していました。
+        <strong>測る側が死ぬと、事実そのものが歪みます。</strong>今は死活監視を入れています。
+      </p>
+    </article>
+
+    <article class="work">
+      <div class="head">
+        <h3>業務そのものをAIに渡す</h3>
+        <span class="tag">募集文 ④</span>
+      </div>
+      <p>
+        Discordを社内の窓口にして、会社の運営そのものを流しています。朝会、終礼、進捗報告、品質レビュー。
+        スラッシュコマンドは12個。今朝のダッシュボードも、AIが書いてDiscordに投げたものです。
+      </p>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>先に、<em>できないこと</em>を書きます</h2>
+  <p class="muted">
+    面談で崩れる話を、応募の時点で書いておきます。ここを隠して契約すると、最初の1週間でお互いが損をします。
+  </p>
+  <ul class="honest">
+    <li><b>私はエンジニアではありません。</b>コードはClaude Code（AIエージェント）に書かせています。設計と判断と検証は私がやりますが、「自分で書ける人」ではない。</li>
+    <li><b>クラウドワークスでの実績はゼロです。</b>星もレビューもありません。だから、言葉ではなく現物を先に出しています。</li>
+    <li><b>Instagram・TikTok・Meta広告の運用経験はありません。</b>私が回しているのはThreadsだけです。仕組みの作り方は同じですが、その3つの実務は未経験です。</li>
+    <li><b>Make・Zapier・n8n・GASは使っていません。</b>Python、GitHub Actions、Claude Codeで組んでいます。指定があれば合わせます。</li>
+    <li><b>PowerPointの自動生成は、まだやったことがありません。</b>やっているのはレポートの自動生成までです。①のご要望には、素材を貯める仕組みから入るのが早いと考えています。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>最初の30日で、やること</h2>
+  <ol class="plan">
+    <li><b>代表の1週間を、そのまま見せてもらう</b><span>どの業務に、何時間、何回。ここを聞かずに作ると、要らないものが出来上がります。</span></li>
+    <li><b>手で直している箇所を特定する</b><span>「AIに出させたが、結局手で直した」瞬間が、いちばん自動化の効くところです。</span></li>
+    <li><b>1つだけ自動化して、動かす</b><span>全部を一度に組みません。1つ動かして、時間が実際に減ったかを数字で見ます。減っていなければ捨てます。</span></li>
+  </ol>
+  <p style="margin-top:28px" class="muted">
+    作る前に、必ず見せます。私は「作ってから見せて直す」やり方で何度も失敗しました。
+  </p>
+</section>
+
+<footer class="close">
+  <p class="verdict">
+    「この業務はAIで自動化できます」と言うのは、簡単です。<br>
+    <em>それを、自分の会社で先にやりました。</em>
+  </p>
+  <div class="sig">
+    荒川（企業道）<br>
+    ポートフォリオ：<a href="https://aulait1117-ux.github.io/portfolio/">aulait1117-ux.github.io/portfolio</a><br>
+    稼働：週20時間以上／即日開始可／オンライン面談 可
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
