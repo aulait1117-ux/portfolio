@@ -69,9 +69,22 @@
     font-size:clamp(19px,3.6vw,40px); line-height:1.7; letter-spacing:.01em;
   }
   .verdict em{ font-style:normal; color:var(--brass); }
+  /* ヒーローの直後。前は 15px の暗いグレーに白い太字が混ざり、視線が散って読みにくかった。
+     色を上げ、字を大きくし、太字は使わず「真鍮の下線」で1語だけ持ち上げる。 */
   .hero .job{
-    margin-top:clamp(36px,6vh,56px); padding-top:26px; border-top:1px solid var(--line);
-    color:var(--warm-dim); font-size:15px; max-width:34em;
+    margin-top:clamp(36px,6vh,56px); padding-top:28px; border-top:1px solid var(--line);
+    color:#BDB4A6; font-size:16.5px; line-height:2.1; max-width:32em;
+    line-break:strict;
+  }
+  :root:has(*) .hero .job{ color:#BDB4A6; }
+  @media (prefers-color-scheme: light){ .hero .job{ color:#5A5866; } }
+  .hero .job u{
+    text-decoration:none; color:var(--warm);
+    border-bottom:1px solid var(--brass); padding-bottom:2px;
+  }
+  .hero .proof{
+    margin-top:22px; font-family:var(--f-min); font-size:clamp(18px,2.4vw,22px);
+    color:var(--brass); letter-spacing:.02em;
   }
 
   /* 入場アニメーション（フェードイン）は入れない。
@@ -84,12 +97,26 @@
   .h{ display:flex; align-items:baseline; gap:16px; margin-bottom:14px; }
   .h .idx{ font-family:var(--f-mono); font-size:11px; letter-spacing:.16em; color:var(--brass); flex:none; }
   h2{ font-family:var(--f-min); font-size:clamp(22px,3.4vw,30px); font-weight:600; line-height:1.5; text-wrap:balance; }
-  .sub{ color:var(--warm-dim); font-size:15px; max-width:58ch; margin-bottom:40px; }
+  /* 見出し下の説明。ヒーロー下と同じ理由で、暗いグレー＋白い太字は読みにくい。
+     色を上げ、字を大きくし、強調は真鍮の下線1本だけにする。 */
+  .sub{ color:#BDB4A6; font-size:16px; line-height:2.05; max-width:34em; margin-bottom:40px; line-break:strict; }
+  .sub u{ text-decoration:none; color:var(--warm); border-bottom:1px solid var(--brass); padding-bottom:2px; }
+  @media (prefers-color-scheme: light){
+    .sub, .moves p, .rules li, .me-box p, .card.me .say{ color:#5A5866; }
+    .card.ai .body, .card.ai .say{ color:#78849A; }
+  }
 
   /* ══ 実演カード ══ */
-  .demo{ display:grid; gap:20px; }
-  @media(min-width:800px){ .demo{ grid-template-columns:1fr 1fr; align-items:start; } }
-  .card{ background:var(--bg-up); border:1px solid var(--line); padding:28px 26px 24px; }
+  /* 2枚は必ず同じ高さにする（片方だけ長いと、短いほうが宙に浮いて壊れて見える）。
+     ボタンは下端にそろえる。 */
+  .demo{ display:grid; gap:20px; align-items:stretch; }
+  @media(min-width:800px){ .demo{ grid-template-columns:1fr 1fr; } }
+  .card{
+    background:var(--bg-up); border:1px solid var(--line); padding:28px 26px 24px;
+    display:flex; flex-direction:column;
+  }
+  .card .body{ flex:1; }
+  .card .act{ margin-top:auto; }
   .card .tag{
     font-family:var(--f-mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase;
     display:flex; align-items:center; gap:10px; margin-bottom:22px;
@@ -98,8 +125,10 @@
   .card.ai .tag{ color:var(--cold); }
   .card.me .tag{ color:var(--brass); }
 
-  .card.ai .body{ color:var(--cold); font-size:15.5px; line-height:2.05; min-height:11.5em; }
-  .card.me .body{ font-family:var(--f-min); font-size:16.5px; line-height:2.1; white-space:pre-line; min-height:11.5em; }
+  /* 「死んだ文章」に見せたいが、読めなければ意味がない。
+     AI側は #67758A だと暗すぎて読めなかったので、明度を上げて彩度は抜いたまま残す。 */
+  .card.ai .body{ color:#8996A8; font-size:16px; line-height:2.0; }
+  .card.me .body{ font-family:var(--f-min); font-size:17px; line-height:2.0; white-space:pre-line; }
 
   .slot{
     color:var(--warm); border-bottom:1px dashed var(--cold-dim); padding-bottom:1px;
@@ -123,9 +152,10 @@
   .card.me button{ color:var(--brass); }
   .card.me button:hover{ background:var(--brass); color:var(--bg); }
   button:focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
-  .say{ margin-top:14px; font-size:13px; line-height:1.8; min-height:3.2em; }
-  .card.ai .say{ color:var(--cold); }
-  .card.me .say{ color:var(--warm-dim); }
+  /* ボタンの下の一言。13px＋暗い色だと読めない。ここが実演のオチなので上げる。 */
+  .say{ margin-top:14px; font-size:14px; line-height:1.9; min-height:3.6em; }
+  .card.ai .say{ color:#8996A8; }
+  .card.me .say{ color:#BDB4A6; }
   .say strong{ color:var(--warm); }
   .card.me .say strong.bad{ color:var(--break); }
 
@@ -137,7 +167,7 @@
   @media(min-width:700px){ .moves li{ grid-template-columns:52px 1fr; } }
   .moves .n{ font-family:var(--f-mono); font-size:11px; color:var(--brass); padding-top:7px; letter-spacing:.1em; }
   .moves h3{ font-family:var(--f-min); font-size:18px; font-weight:600; margin-bottom:4px; }
-  .moves p{ color:var(--warm-dim); font-size:14.5px; }
+  .moves p{ color:#BDB4A6; font-size:15px; line-height:2.0; }
 
   /* ══ 台本 ══ */
   .script{ border:1px solid var(--line); background:var(--bg-up); }
@@ -165,11 +195,11 @@
   td.p{ font-family:var(--f-mono); color:var(--brass); font-variant-numeric:tabular-nums; white-space:nowrap; }
   tr:last-child td{ border-bottom:0; }
   .rules{ margin-top:26px; }
-  .rules li{ list-style:none; padding-left:22px; position:relative; color:var(--warm-dim); font-size:14px; margin-bottom:10px; }
+  .rules li{ list-style:none; padding-left:22px; position:relative; color:#BDB4A6; font-size:15px; line-height:1.95; margin-bottom:12px; }
   .rules li::before{ content:"—"; position:absolute; left:0; color:var(--brass); font-family:var(--f-mono); }
 
   /* ══ 自己紹介 ══ */
-  .me-box p{ color:var(--warm-dim); font-size:15px; max-width:60ch; margin-bottom:18px; }
+  .me-box p{ color:#BDB4A6; font-size:16px; line-height:2.05; max-width:34em; margin-bottom:18px; }
   .me-box strong{ color:var(--warm); }
   .links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
   .links a{
@@ -206,13 +236,14 @@
 
     <p class="verdict"><em>この3行は、どの商品にも使えます。</em><br>だから、どの商品も売れません。</p>
 
-    <p class="job">AIに書かせると、必ずここへ落ちます。悪い文章だからではなく、<strong style="color:var(--warm)">平均的すぎるから</strong>です。台本の仕事は、この3行を消すことだと思っています。証明します。</p>
+    <p class="job">AIが、悪い文章を書くわけではありません。<u>平均的すぎる</u>だけです。<br>台本の仕事は、この3行を消すことだと思っています。</p>
+    <p class="proof">——証明します。</p>
   </header>
 
   <!-- ═══ 01 実演 ═══ -->
   <section>
     <div class="h"><span class="idx">01</span><h2>この文章、商品を貼り替えても成立します。</h2></div>
-    <p class="sub">左がAIの下書き。ボタンを押すと、商品名だけを別のものに入れ替えます。<strong style="color:var(--warm)">それでも文章が壊れないことを、見てください。</strong>——壊れないということは、その商品について何も言っていない、ということです。</p>
+    <p class="sub">左がAIの下書きです。ボタンを押すと、商品名だけが入れ替わります。<br><u>それでも文章が壊れないことを、見てください。</u></p>
 
     <div class="demo">
 
@@ -220,9 +251,9 @@
         <div class="tag">AIの下書き</div>
         <div class="body">
           今日はダイソーの<span class="slot" id="aiName">クローゼット収納ケース</span>をご紹介します。<br>
-          これ、とても便利なんです。サイズもちょうどよく、いろいろな場所で使えます。<br>
-          毎日の暮らしがぐっと快適になりますよ。<br>
-          お値段もお手頃なので、気になった方はぜひチェックしてみてください！
+          これ、とても便利なんです。<br>
+          サイズもちょうどよく、いろいろな場所で使えます。<br>
+          気になった方は、ぜひチェックしてみてください！
         </div>
         <div class="act">
           <button id="swapAI" type="button">商品を貼り替える →</button>
@@ -235,17 +266,12 @@
         <div class="body" id="meBody">奥行、<span class="num">20.2</span>センチ。
 
 この数字にピンと来た人は、たぶん一回失敗してます。
+シンク下に<span class="slot" id="meName">収納ケース</span>を入れようとして、扉が閉まらなかった人です。
 
-シンク下に<span class="slot" id="meName">収納ケース</span>を入れようとして、扉が閉まらなかったこと、ありませんか。
-普通のやつ、奥行<span class="num">40</span>センチくらいあるんですよ。深いところ用なので。
+普通のやつは、奥行<span class="num">40</span>センチ。これは、その半分。
+つまり「浅い棚」に入ります。
 
-これ、その半分です。
-
-「浅い棚」に入る。シンク下、洗面台の下、押入れの手前半分。
-奥行が足りなくて諦めてた場所が、全部収納に変わります。
-
-……逆に、深いクローゼットには向いてません。奥がスカスカになります。
-「浅い場所に困ってる人」だけ、買ってください。</div>
+……逆に、深いクローゼットには向いてません。奥がスカスカになります。</div>
         <div class="act">
           <button id="swapME" type="button">同じことをしてみる →</button>
           <p class="say" id="sayME">こちらは、貼り替えられません。試してみてください。</p>
@@ -330,7 +356,7 @@
   <!-- ═══ 03 リサーチ ═══ -->
   <section>
     <div class="h"><span class="idx">03</span><h2>商品リサーチ（ご依頼①も、実際にやりました）</h2></div>
-    <p class="sub">1本あたり6〜8商品ぶん。<strong style="color:var(--warm)">台本のフックになる「数字」が取れる記事だけ</strong>を拾います。数字のない記事は、台本の材料になりません。</p>
+    <p class="sub">1本あたり6〜8商品ぶん。<u>台本のフックになる「数字」が取れる記事だけ</u>を拾います。<br>数字のない記事は、台本の材料になりません。</p>
 
     <div class="scroll">
       <table>
@@ -357,13 +383,12 @@
   <!-- ═══ 04 自己紹介 ═══ -->
   <section class="me-box">
     <div class="h"><span class="idx">04</span><h2>荒川と申します。</h2></div>
-    <p>普段は、Webサービスを個人で作って公開しています。面接練習のAIアプリ、ゲーム向けの分析ツールなど。文章も、そのサービスの説明や導線を全部、自分で書いてきました。</p>
+    <p>普段は、Webサービスを個人で作っています。このページも自分で書いて、自分で組みました。文章も、サービスの説明も導線も、全部ひとりでやってきました。</p>
     <p><strong>「読んだ人が、動くかどうか」でしか書きません。</strong>そこは、台本もサービスも同じだと思っています。</p>
     <p>クラウドワークスでの実績は、まだありません。星の数で判断していただけないぶん、<strong>先に現物を作って持ってきました。</strong>1本目から使える品質かどうかは、上をご覧いただければ判断できると思います。</p>
 
     <div class="links">
-      <a href="https://aulait1117-ux.github.io/portfolio/">ポートフォリオ</a>
-      <a href="https://interview-assistant-frontend-gcgj.onrender.com">面接AI（公開中）</a>
+      <a href="https://aulait1117-ux.github.io/portfolio/">ポートフォリオを見る</a>
     </div>
 
     <p class="fine">
@@ -417,7 +442,7 @@
       meName.textContent = "目玉焼き器";
       meName.className = "slot broke";
       bump(meName);
-      sayME.innerHTML = '<strong class="bad">壊れました。</strong>「シンク下に目玉焼き器を入れようとして、扉が閉まらなかった」——意味が通りません。<br>つまりこの文章は、<strong>この商品にしか使えない</strong>。それが、伝わる台本です。';
+      sayME.innerHTML = '<strong class="bad">壊れました。</strong>「シンク下に目玉焼き器を入れようとして、扉が閉まらなかった人」——意味が通りません。<br>この文章は、<strong>この商品にしか使えない</strong>。それが、伝わる台本です。';
       btnME.textContent = "元に戻す ←";
     } else {
       meName.textContent = "収納ケース";
