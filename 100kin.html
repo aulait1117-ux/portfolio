@@ -49,9 +49,13 @@
     font-family:var(--f-mono); font-size:11px; letter-spacing:.24em;
     color:var(--cold); text-transform:uppercase; margin-bottom:clamp(40px,7vh,72px);
   }
-  /* 日本語の折り返し：ch単位は半角基準なので使わない。禁則を効かせ、
-     折り返し位置は<br>で自分で決める（勝手に「いろいろ使え／ます」で折れるのを防ぐ） */
-  .hero, .verdict, .dead{ line-break:strict; word-break:normal; overflow-wrap:normal; }
+  /* 日本語の折り返し：ch単位は半角基準なので使わない（24ch＝日本語だと想定の半分の幅になる）。
+     禁則（line-break:strict）は効かせるが、**折り返しそのものは殺さない**。
+     一度 overflow-wrap:normal を入れたところ、スマホ幅で行が折れずに右端が切れて読めなくなった。
+     広い画面での改行位置は<br>で決め、狭い画面では素直に折り返させる。 */
+  .hero, .verdict, .dead{ line-break:strict; overflow-wrap:break-word; }
+  /* グリッドの子は既定で min-width:auto ＝ 中身が広いと親を押し広げて画面外へはみ出す */
+  .demo > *, .script .row > *, .moves li > *{ min-width:0; }
 
   .dead{ margin-bottom:clamp(34px,5vh,48px); border-left:2px solid var(--cold-dim); padding-left:clamp(18px,2.5vw,28px); }
   .dead li{
@@ -60,7 +64,9 @@
   }
   .verdict{
     font-family:var(--f-min); font-weight:600;
-    font-size:clamp(22px,3.6vw,40px); line-height:1.7; letter-spacing:.01em;
+    /* 下限19px＝スマホ(390px)でも「この3行は、どの商品にも使えます。」が1行に収まる幅。
+       22pxだと「す。」だけが次行に落ちて、決め台詞が締まらない */
+    font-size:clamp(19px,3.6vw,40px); line-height:1.7; letter-spacing:.01em;
   }
   .verdict em{ font-style:normal; color:var(--brass); }
   .hero .job{
