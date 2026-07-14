@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台本サンプル｜100均レビュー動画 — Ara</title>
+<meta name="description" content="AIの下書きを「商品が伝わる台本」に仕上げる。ビフォー／アフターと完成台本のサンプル。">
+<meta name="robots" content="noindex">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+  :root{
+    --paper:#FAFAF8;
+    --grid:#ECECE7;
+    --rule:#DEDEDA;
+    --ink:#23262B;
+    --soft:#6B7078;
+    --faint:#9A9EA5;
+    --accent:#0B6E67;          /* 計測の色 */
+    --accent-wash:#E4F0EE;
+    --weak:#9A968E;            /* AIの下書き＝色が抜けている */
+    --weak-wash:#F1F0EC;
+    --card:#FFFFFF;
+    --f-mincho:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+    --f-gothic:"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#15171A; --grid:#1E2126; --rule:#2C3038; --ink:#E8E8E4;
+      --soft:#A0A5AD; --faint:#6C7280; --accent:#4FB3A8; --accent-wash:#17302E;
+      --weak:#8D887F; --weak-wash:#1D1F22; --card:#191C20;
+    }
+  }
+
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--f-gothic); font-size:16px; line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px),
+                     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  .sheet{
+    max-width:840px; margin:0 auto; background:var(--paper);
+    border-left:1px solid var(--rule); border-right:1px solid var(--rule);
+    padding:0 clamp(20px,5vw,56px) 100px;
+  }
+
+  /* ── 目盛り ── */
+  .ruler{
+    height:26px; border-bottom:1px solid var(--rule);
+    background-image:repeating-linear-gradient(90deg,var(--rule) 0 1px,transparent 1px 14px);
+    background-position:bottom; background-repeat:repeat-x; background-size:14px 7px;
+    margin-bottom:56px;
+  }
+
+  /* ── ヘッダ ── */
+  .tag{
+    display:inline-block; font-family:var(--f-mono); font-size:10.5px;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--accent);
+    border:1px solid var(--accent); padding:4px 10px; margin:48px 0 28px;
+  }
+  h1{
+    font-family:var(--f-mincho); font-weight:600;
+    font-size:clamp(26px,4.6vw,38px); line-height:1.45; letter-spacing:.01em;
+    text-wrap:balance; margin-bottom:24px;
+  }
+  .thesis{ color:var(--soft); font-size:15.5px; max-width:60ch; }
+  .thesis b{ color:var(--ink); font-weight:700; }
+
+  /* ── 数字のヒーロー ── */
+  .measure{
+    margin:56px 0; padding:36px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    display:flex; align-items:baseline; gap:20px; flex-wrap:wrap;
+  }
+  .measure .big{
+    font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums;
+    font-size:clamp(56px,13vw,104px); line-height:.9; color:var(--accent);
+    letter-spacing:-.02em;
+  }
+  .measure .unit{ font-family:var(--f-mono); font-size:22px; color:var(--accent); }
+  .measure .say{ font-family:var(--f-mincho); font-size:17px; color:var(--soft); flex:1 1 240px; min-width:220px; }
+  .measure .say b{ color:var(--ink); }
+
+  /* ── 見出し ── */
+  section{ margin-top:80px; }
+  h2{
+    font-family:var(--f-mincho); font-size:21px; font-weight:600;
+    display:flex; align-items:baseline; gap:14px;
+    padding-bottom:12px; border-bottom:1px solid var(--ink); margin-bottom:32px;
+  }
+  h2 .idx{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.1em;
+    color:var(--accent); flex:none;
+  }
+  p{ margin-bottom:16px; }
+  p:last-child{ margin-bottom:0; }
+
+  /* ── ビフォー／アフター ── */
+  .ba{ display:grid; gap:2px; background:var(--rule); border:1px solid var(--rule); }
+  @media(min-width:720px){ .ba{ grid-template-columns:1fr 1.15fr; } }
+  .ba > div{ background:var(--card); padding:26px 24px; }
+  .ba .lab{
+    font-family:var(--f-mono); font-size:10px; letter-spacing:.16em;
+    text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+  .ba .lab::after{ content:""; flex:1; height:1px; background:currentColor; opacity:.28; }
+  .b .lab{ color:var(--weak); }
+  .a .lab{ color:var(--accent); }
+  .b{ background:var(--weak-wash) !important; }
+  .a{ background:var(--card); }
+  .b .txt{ color:var(--weak); font-size:14.5px; line-height:1.95; }
+  .a .txt{ font-family:var(--f-mincho); font-size:16px; line-height:2.05; white-space:pre-line; }
+  .a .txt b{ color:var(--accent); font-weight:600; }
+  .verdict{
+    margin-top:18px; padding-top:14px; border-top:1px dashed var(--rule);
+    font-size:12.5px; color:var(--faint); line-height:1.75;
+  }
+
+  .moves{ margin-top:2px; border:1px solid var(--rule); border-top:0; background:var(--card); }
+  .moves li{ list-style:none; display:flex; gap:16px; padding:16px 24px; border-bottom:1px solid var(--rule); font-size:14.5px; }
+  .moves li:last-child{ border-bottom:0; }
+  .moves .n{ font-family:var(--f-mono); font-size:11px; color:var(--accent); padding-top:5px; flex:none; }
+  .moves b{ color:var(--ink); }
+
+  /* ── 台本（撮影台本レイアウト） ── */
+  .script{ border:1px solid var(--rule); background:var(--card); }
+  .row{ display:grid; border-bottom:1px solid var(--rule); }
+  @media(min-width:720px){ .row{ grid-template-columns:150px 1fr; } }
+  .row:last-child{ border-bottom:0; }
+  .cue{
+    padding:22px 18px; border-right:1px solid var(--rule);
+    font-family:var(--f-mono); font-size:11px; line-height:1.8; color:var(--faint);
+    background:var(--paper);
+  }
+  .cue .t{ color:var(--accent); display:block; margin-bottom:6px; letter-spacing:.06em; }
+  .line{ padding:22px 26px; font-family:var(--f-mincho); font-size:16px; line-height:2.1; }
+  .line p{ margin-bottom:14px; }
+  .line .hit{ font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums; color:var(--accent); font-size:17px; }
+  .line .flip{ color:var(--soft); }
+  @media(max-width:719px){
+    .cue{ border-right:0; border-bottom:1px solid var(--rule); padding:14px 18px; }
+  }
+
+  /* ── リサーチ表 ── */
+  .scroll{ overflow-x:auto; border:1px solid var(--rule); }
+  table{ border-collapse:collapse; width:100%; min-width:600px; background:var(--card); }
+  th,td{ padding:12px 16px; text-align:left; border-bottom:1px solid var(--rule); font-size:13.5px; vertical-align:top; }
+  th{
+    font-family:var(--f-mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--faint); font-weight:400; background:var(--paper); white-space:nowrap;
+  }
+  td.n{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; color:var(--accent); white-space:nowrap; }
+  tr:last-child td{ border-bottom:0; }
+  .rules{ margin-top:20px; font-size:13.5px; color:var(--soft); }
+  .rules li{ list-style:none; padding-left:20px; position:relative; margin-bottom:8px; }
+  .rules li::before{ content:"—"; position:absolute; left:0; color:var(--accent); font-family:var(--f-mono); }
+
+  /* ── フッタ ── */
+  .who{ margin-top:88px; padding-top:36px; border-top:1px solid var(--ink); }
+  .who h3{ font-family:var(--f-mincho); font-size:19px; font-weight:600; margin-bottom:18px; }
+  .who p{ font-size:14.5px; color:var(--soft); max-width:62ch; }
+  .who a{ color:var(--accent); text-underline-offset:3px; }
+  .links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+  .links a{
+    font-family:var(--f-mono); font-size:12px; letter-spacing:.04em;
+    border:1px solid var(--rule); padding:9px 14px; text-decoration:none;
+    color:var(--ink); transition:border-color .15s,color .15s;
+  }
+  .links a:hover{ border-color:var(--accent); color:var(--accent); }
+  a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+  .fine{ margin-top:32px; font-size:12px; color:var(--faint); line-height:1.8; }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="ruler"></div>
+
+  <span class="tag">台本サンプル ／ 100均レビュー動画</span>
+
+  <h1>「便利です」を、<br>数字に置き換える仕事です。</h1>
+  <p class="thesis">AIの下書きが伝わらないのには、理由があります。AIは平均的な言い方しか書けないので、必ず「便利です」「ぜひチェックしてみてください」に落ちる。<b>どの商品でも成立する文章は、どの商品も売れない文章です。</b>直す方法は1つ、その商品にしかない具体を入れること。実物でお見せします。</p>
+
+  <div class="measure">
+    <span class="big">20.2</span><span class="unit">cm</span>
+    <p class="say">この数字にピンと来た人は、たぶん一回失敗してます。<br><b>シンク下で、扉が閉まらなかった人です。</b></p>
+  </div>
+
+  <section>
+    <h2><span class="idx">01</span>同じ商品を、2通りで書きました</h2>
+    <p style="color:var(--soft);font-size:14.5px">商品：ダイソー クローゼット収納ケース（新サイズ・奥行20.2cm）</p>
+
+    <div class="ba">
+      <div class="b">
+        <div class="lab">AIの下書き</div>
+        <div class="txt">今日はダイソーのおすすめ収納グッズをご紹介します。こちらのクローゼット収納ケース、とても便利なんです。サイズもちょうどよく、いろいろな場所で使えます。お値段もお手頃なので、気になった方はぜひチェックしてみてください！</div>
+        <div class="verdict">書いてあることは全部本当。でも<strong>どの収納ケースにも当てはまる</strong>。「便利」「ちょうどいい」「いろいろ」——視聴者の頭に何も残らず、スクロールされて終わる。</div>
+      </div>
+      <div class="a">
+        <div class="lab">仕上げ後</div>
+        <div class="txt"><b>奥行、20.2センチ。</b>
+
+この数字にピンと来た人は、たぶん一回失敗してます。
+
+シンク下に収納ケースを入れようとして、扉が閉まらなかったこと、ありませんか。
+普通のクローゼット収納って、奥行40センチくらいあるんですよ。深いところ用なので。
+
+これ、その半分です。
+
+何が変わるかというと、「浅い棚」に入る。
+シンク下、洗面台の下、押入れの手前半分。
+今まで奥行が足りなくて諦めてた場所が、全部収納に変わります。
+
+……逆に言うと、深いクローゼットには向いてません。
+奥がスカスカになって、結局もう1個買うことになります。そこは正直に言っておきます。
+
+「浅い場所に困ってる人」だけ、買ってください。</div>
+      </div>
+    </div>
+
+    <ul class="moves">
+      <li><span class="n">01</span><span><b>数字を先頭に置く。</b>「ちょうどいい」という感想を、20.2cmという検証できる事実に置き換える。</span></li>
+      <li><span class="n">02</span><span><b>失敗を書く。</b>扉が閉まらない——視聴者が「それ俺だ」と思う瞬間を作る。ここで初めて自分ごとになる。</span></li>
+      <li><span class="n">03</span><span><b>向いていない人を書く。</b>これが一番効きます。欠点を言うチャンネルは信用される。全部おすすめすると、全部信用されなくなる。</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="idx">02</span>完成台本（ダイソー3点・そのまま撮れる形）</h2>
+
+    <div class="script">
+      <div class="row">
+        <div class="cue"><span class="t">冒頭 15s</span>〔つかみ〕</div>
+        <div class="line">
+          <p>100均で収納買って、<strong>帰ってから入らなかった</strong>こと、ありますよね。</p>
+          <p>サイズを測ったつもりが、扉のぶんを忘れてた。奥行が5センチ足りなかった。あの、袋から出して「あっ」ってなる瞬間。</p>
+          <p>今日は、その「あっ」を消してくれるダイソーのグッズを3つ。全部、値段と実測サイズを出しながら話します。</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="cue"><span class="t">1品目</span>クローゼット<br>収納ケース<br><br>〔手に持って、奥行を定規で見せる〕<br><br>〔シンク下に入れるカット〕</div>
+        <div class="line">
+          <p><span class="hit">奥行、20.2センチ。</span></p>
+          <p>普通のクローゼット収納って、奥行40センチくらいあるんです。深い場所用なので。これ、その半分。</p>
+          <p>何が変わるか。<strong>「浅い棚」に入るんです。</strong>シンク下、洗面台の下、押入れの手前半分。今まで「奥行が足りない」で諦めてた場所が、全部使えるようになる。</p>
+          <p class="flip">……逆に、深いクローゼットには向いてません。奥がスカスカになります。<strong>「浅い場所に困ってる人」だけ、買ってください。</strong></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="cue"><span class="t">2品目</span>電子レンジ<br>調理器（目玉焼き）<br><br>〔卵を割り入れて、レンジへ〕<br><br>〔チンして開ける〕</div>
+        <div class="line">
+          <p><span class="hit">110円。500Wで、約60秒。</span></p>
+          <p>朝、フライパン出して、油ひいて、焼いて、洗う。あれ、トータルで何分かかってると思います？</p>
+          <p>これ、<strong>洗い物がこれ1個</strong>です。</p>
+          <p class="flip">……正直に言うと、フライパンで焼いた目玉焼きのほうがおいしいです。縁のカリカリは出ません。</p>
+          <p>でも平日の朝7時、それ求めてます？「1分で、洗い物1個」のほうが勝ってる朝って、あると思うんですよ。</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="cue"><span class="t">3品目</span>2IN1車載<br>ドリンクホルダー<br><br>〔紙コップ → カップ麺の順に置く〕<br><br>〔広げるカット〕</div>
+        <div class="line">
+          <p>330円。100円じゃないです。<strong>330円</strong>。でもこれ、開くんですよ。</p>
+          <p>最大で、<span class="hit">直径 約150ミリ</span>まで。何が入るかというと——<strong>カップ麺が入ります。</strong></p>
+          <p>コンビニの紙コップコーヒーも、タンブラーも、カップ麺も、全部1個で受ける。車で仮眠する人、長距離運転する人、車中泊やる人。「ドリンクホルダーが小さくて入らない」って、地味に毎回イラッとするやつです。</p>
+          <p>あれが、330円で終わります。</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="cue"><span class="t">締め 20s</span>〔3点を並べて〕</div>
+        <div class="line">
+          <p>今日の3つ、共通してるのは<strong>「サイズで失敗した経験がある人ほど刺さる」</strong>ってところです。</p>
+          <p>・奥行20.2センチ ＝ 浅い棚に入る<br>・110円 ＝ 60秒、洗い物1個<br>・330円 ＝ 直径150ミリ、カップ麺が入る</p>
+          <p>数字で覚えて帰ってください。売り場で迷わなくなります。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="idx">03</span>商品リサーチ（ご依頼①を、実際にやりました）</h2>
+    <p style="color:var(--soft);font-size:14.5px">1本あたり6〜8商品ぶん。台本のフックになる「数字」が取れる記事だけを拾っています。</p>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>商品</th><th>店</th><th>価格</th><th>台本フック（＝数字）</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1</td><td>クローゼット収納ケース（新サイズ）</td><td>ダイソー</td><td class="n">—</td><td>奥行20.2cm＝従来品の約半分。浅い棚・シンク下に入る</td></tr>
+          <tr><td class="n">2</td><td>電子レンジ調理器（目玉焼き）</td><td>ダイソー</td><td class="n">110円</td><td>500Wで約60秒。洗い物が1個で済む</td></tr>
+          <tr><td class="n">3</td><td>2IN1車載ドリンクホルダー</td><td>ダイソー</td><td class="n">330円</td><td>最大直径約150mm。紙コップ〜カップ麺まで対応</td></tr>
+          <tr><td class="n">4</td><td>折りたたみ収納ボックス（前面扉つき）</td><td>ダイソー</td><td class="n">—</td><td>積んだまま中身が取り出せる。「見せる収納」向き</td></tr>
+          <tr><td class="n">5</td><td>仕分けポーチ（縦ポケット3列・半透明）</td><td>ダイソー</td><td class="n">110円</td><td>スライダー開閉。中身が透けて把握できる</td></tr>
+          <tr><td class="n">6</td><td>バスケット用仕切り（2個入）</td><td>セリア</td><td class="n">110円</td><td>既存のカゴを仕切って区分けできる</td></tr>
+          <tr><td class="n">7</td><td>配線カバー各種</td><td>セリア</td><td class="n">—</td><td>複数コードをまとめる／隠すタイプあり</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="rules">
+      <li>予約サイト・アフィリエイト目的のまとめ記事は使いません（触っていない記事は、台本の材料になりません）</li>
+      <li>「価格・サイズ・実測値」が書かれた記事を優先します（フックは数字から作るので）</li>
+      <li>記事が見つからない商品は、空欄にせず「記事なし」と書きます（黙って空欄にすると、探し忘れと区別がつかないので）</li>
+    </ul>
+  </section>
+
+  <div class="who">
+    <h3>荒川（Ara）</h3>
+    <p>普段はWebサービスを作っています。面接練習のAIアプリ、ゲーム向けの分析ツールなどを個人で開発・公開しています。文章も、そのプロダクトの説明や導線を自分で書いてきました。<strong style="color:var(--ink)">「読んだ人が動くかどうか」で書く</strong>、という一点は、台本もサービスも同じだと思っています。</p>
+    <div class="links">
+      <a href="https://aulait1117-ux.github.io/portfolio/">ポートフォリオ</a>
+      <a href="https://interview-assistant-frontend-gcgj.onrender.com">面接AI（公開中）</a>
+    </div>
+    <p class="fine">
+      ※ このページの商品情報は、Web上のレビュー記事をもとに構成したものです。私が実際に購入して試したものではありません。<strong>台本の書き方・構成をご覧いただくためのサンプル</strong>です。実際にお仕事をいただけたら、商品を触ったうえで書きます。<br>
+      ※ 価格・在庫は店舗により異なる場合があります。
+    </p>
+  </div>
+</div>
+</body>
+</html>
