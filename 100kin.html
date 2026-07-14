@@ -3,324 +3,425 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>台本サンプル｜100均レビュー動画 — Ara</title>
-<meta name="description" content="AIの下書きを「商品が伝わる台本」に仕上げる。ビフォー／アフターと完成台本のサンプル。">
+<title>台本サンプル｜100均レビュー動画 — 荒川</title>
+<meta name="description" content="AIの下書きを、商品が伝わる台本に。ビフォー／アフターと完成台本。">
 <meta name="robots" content="noindex">
 <style>
-  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
   :root{
-    --paper:#FAFAF8;
-    --grid:#ECECE7;
-    --rule:#DEDEDA;
-    --ink:#23262B;
-    --soft:#6B7078;
-    --faint:#9A9EA5;
-    --accent:#0B6E67;          /* 計測の色 */
-    --accent-wash:#E4F0EE;
-    --weak:#9A968E;            /* AIの下書き＝色が抜けている */
-    --weak-wash:#F1F0EC;
-    --card:#FFFFFF;
-    --f-mincho:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP",serif;
-    --f-gothic:"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    --bg:#0C0D10;
+    --bg-up:#131519;
+    --line:#22262E;
+    --line-soft:#1A1D23;
+    --cold:#67758A;        /* 機械の声：彩度を抜いた青灰 */
+    --cold-dim:#3B434F;
+    --warm:#EFE6DA;        /* 人の声：体温のある白 */
+    --warm-dim:#9A9285;
+    --brass:#E0AE6B;       /* 数字だけが持つ重さ */
+    --brass-dim:#7A5E38;
+    --break:#C4675E;       /* 壊れたとき */
+    --f-min:"Yu Mincho","YuMincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+    --f-got:"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
     --f-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
-  @media (prefers-color-scheme: dark){
+  @media (prefers-color-scheme: light){
     :root{
-      --paper:#15171A; --grid:#1E2126; --rule:#2C3038; --ink:#E8E8E4;
-      --soft:#A0A5AD; --faint:#6C7280; --accent:#4FB3A8; --accent-wash:#17302E;
-      --weak:#8D887F; --weak-wash:#1D1F22; --card:#191C20;
+      --bg:#F6F4F0; --bg-up:#FFFFFF; --line:#DFDAD2; --line-soft:#EBE7E1;
+      --cold:#8C97A6; --cold-dim:#B9C0C9;
+      --warm:#1E2026; --warm-dim:#6C6A78;
+      --brass:#9A6B24; --brass-dim:#D9BE93;
+      --break:#B0483E;
     }
   }
 
-  html{ scroll-behavior:smooth; }
   body{
-    background:var(--paper); color:var(--ink);
-    font-family:var(--f-gothic); font-size:16px; line-height:1.9;
-    -webkit-font-smoothing:antialiased;
-    background-image:linear-gradient(var(--grid) 1px, transparent 1px),
-                     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:28px 28px;
+    background:var(--bg); color:var(--warm);
+    font-family:var(--f-got); font-size:16px; line-height:1.9;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
   }
-  .sheet{
-    max-width:840px; margin:0 auto; background:var(--paper);
-    border-left:1px solid var(--rule); border-right:1px solid var(--rule);
-    padding:0 clamp(20px,5vw,56px) 100px;
-  }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 clamp(20px,5vw,48px); }
+  ::selection{ background:var(--brass); color:var(--bg); }
 
-  /* ── 目盛り ── */
-  .ruler{
-    height:26px; border-bottom:1px solid var(--rule);
-    background-image:repeating-linear-gradient(90deg,var(--rule) 0 1px,transparent 1px 14px);
-    background-position:bottom; background-repeat:repeat-x; background-size:14px 7px;
-    margin-bottom:56px;
+  /* ══ HERO ══ */
+  .hero{ padding:clamp(80px,14vh,150px) 0 clamp(64px,10vh,110px); }
+  .kicker{
+    font-family:var(--f-mono); font-size:11px; letter-spacing:.24em;
+    color:var(--cold); text-transform:uppercase; margin-bottom:clamp(40px,7vh,72px);
   }
+  /* 日本語の折り返し：ch単位は半角基準なので使わない。禁則を効かせ、
+     折り返し位置は<br>で自分で決める（勝手に「いろいろ使え／ます」で折れるのを防ぐ） */
+  .hero, .verdict, .dead{ line-break:strict; word-break:normal; overflow-wrap:normal; }
 
-  /* ── ヘッダ ── */
-  .tag{
-    display:inline-block; font-family:var(--f-mono); font-size:10.5px;
-    letter-spacing:.16em; text-transform:uppercase; color:var(--accent);
-    border:1px solid var(--accent); padding:4px 10px; margin:48px 0 28px;
+  .dead{ margin-bottom:clamp(34px,5vh,48px); border-left:2px solid var(--cold-dim); padding-left:clamp(18px,2.5vw,28px); }
+  .dead li{
+    list-style:none; font-family:var(--f-min);
+    font-size:clamp(17px,2.5vw,27px); line-height:1.95; color:var(--cold);
   }
-  h1{
-    font-family:var(--f-mincho); font-weight:600;
-    font-size:clamp(26px,4.6vw,38px); line-height:1.45; letter-spacing:.01em;
-    text-wrap:balance; margin-bottom:24px;
-  }
-  .thesis{ color:var(--soft); font-size:15.5px; max-width:60ch; }
-  .thesis b{ color:var(--ink); font-weight:700; }
-
-  /* ── 数字のヒーロー ── */
-  .measure{
-    margin:56px 0; padding:36px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
-    display:flex; align-items:baseline; gap:20px; flex-wrap:wrap;
-  }
-  .measure .big{
-    font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums;
-    font-size:clamp(56px,13vw,104px); line-height:.9; color:var(--accent);
-    letter-spacing:-.02em;
-  }
-  .measure .unit{ font-family:var(--f-mono); font-size:22px; color:var(--accent); }
-  .measure .say{ font-family:var(--f-mincho); font-size:17px; color:var(--soft); flex:1 1 240px; min-width:220px; }
-  .measure .say b{ color:var(--ink); }
-
-  /* ── 見出し ── */
-  section{ margin-top:80px; }
-  h2{
-    font-family:var(--f-mincho); font-size:21px; font-weight:600;
-    display:flex; align-items:baseline; gap:14px;
-    padding-bottom:12px; border-bottom:1px solid var(--ink); margin-bottom:32px;
-  }
-  h2 .idx{
-    font-family:var(--f-mono); font-size:11px; letter-spacing:.1em;
-    color:var(--accent); flex:none;
-  }
-  p{ margin-bottom:16px; }
-  p:last-child{ margin-bottom:0; }
-
-  /* ── ビフォー／アフター ── */
-  .ba{ display:grid; gap:2px; background:var(--rule); border:1px solid var(--rule); }
-  @media(min-width:720px){ .ba{ grid-template-columns:1fr 1.15fr; } }
-  .ba > div{ background:var(--card); padding:26px 24px; }
-  .ba .lab{
-    font-family:var(--f-mono); font-size:10px; letter-spacing:.16em;
-    text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px;
-  }
-  .ba .lab::after{ content:""; flex:1; height:1px; background:currentColor; opacity:.28; }
-  .b .lab{ color:var(--weak); }
-  .a .lab{ color:var(--accent); }
-  .b{ background:var(--weak-wash) !important; }
-  .a{ background:var(--card); }
-  .b .txt{ color:var(--weak); font-size:14.5px; line-height:1.95; }
-  .a .txt{ font-family:var(--f-mincho); font-size:16px; line-height:2.05; white-space:pre-line; }
-  .a .txt b{ color:var(--accent); font-weight:600; }
   .verdict{
-    margin-top:18px; padding-top:14px; border-top:1px dashed var(--rule);
-    font-size:12.5px; color:var(--faint); line-height:1.75;
+    font-family:var(--f-min); font-weight:600;
+    font-size:clamp(22px,3.6vw,40px); line-height:1.7; letter-spacing:.01em;
+  }
+  .verdict em{ font-style:normal; color:var(--brass); }
+  .hero .job{
+    margin-top:clamp(36px,6vh,56px); padding-top:26px; border-top:1px solid var(--line);
+    color:var(--warm-dim); font-size:15px; max-width:34em;
   }
 
-  .moves{ margin-top:2px; border:1px solid var(--rule); border-top:0; background:var(--card); }
-  .moves li{ list-style:none; display:flex; gap:16px; padding:16px 24px; border-bottom:1px solid var(--rule); font-size:14.5px; }
-  .moves li:last-child{ border-bottom:0; }
-  .moves .n{ font-family:var(--f-mono); font-size:11px; color:var(--accent); padding-top:5px; flex:none; }
-  .moves b{ color:var(--ink); }
+  /* 入場アニメーション（フェードイン）は入れない。
+     opacity:0 から始める演出は、アニメーションが走らない環境で「真っ黒な空ページ」になる。
+     得られるのは"フワッと出る"だけ、失うのは相手が開いた最初の1秒。割に合わない。
+     このページの見せ場は下の実演（利用者が押して初めて動く＝ページを空にしない）。 */
 
-  /* ── 台本（撮影台本レイアウト） ── */
-  .script{ border:1px solid var(--rule); background:var(--card); }
-  .row{ display:grid; border-bottom:1px solid var(--rule); }
-  @media(min-width:720px){ .row{ grid-template-columns:150px 1fr; } }
+  /* ══ 見出し ══ */
+  section{ padding:clamp(64px,10vh,110px) 0; border-top:1px solid var(--line-soft); }
+  .h{ display:flex; align-items:baseline; gap:16px; margin-bottom:14px; }
+  .h .idx{ font-family:var(--f-mono); font-size:11px; letter-spacing:.16em; color:var(--brass); flex:none; }
+  h2{ font-family:var(--f-min); font-size:clamp(22px,3.4vw,30px); font-weight:600; line-height:1.5; text-wrap:balance; }
+  .sub{ color:var(--warm-dim); font-size:15px; max-width:58ch; margin-bottom:40px; }
+
+  /* ══ 実演カード ══ */
+  .demo{ display:grid; gap:20px; }
+  @media(min-width:800px){ .demo{ grid-template-columns:1fr 1fr; align-items:start; } }
+  .card{ background:var(--bg-up); border:1px solid var(--line); padding:28px 26px 24px; }
+  .card .tag{
+    font-family:var(--f-mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .card .tag::after{ content:""; flex:1; height:1px; background:currentColor; opacity:.22; }
+  .card.ai .tag{ color:var(--cold); }
+  .card.me .tag{ color:var(--brass); }
+
+  .card.ai .body{ color:var(--cold); font-size:15.5px; line-height:2.05; min-height:11.5em; }
+  .card.me .body{ font-family:var(--f-min); font-size:16.5px; line-height:2.1; white-space:pre-line; min-height:11.5em; }
+
+  .slot{
+    color:var(--warm); border-bottom:1px dashed var(--cold-dim); padding-bottom:1px;
+    transition:opacity .18s;
+  }
+  .card.ai .slot{ color:var(--cold); border-bottom-color:var(--cold-dim); }
+  .slot.swap{ animation:blip .34s ease; }
+  @keyframes blip{ 0%{opacity:0;transform:translateY(-4px)} 100%{opacity:1;transform:none} }
+
+  .num{ font-family:var(--f-mono); font-weight:700; color:var(--brass); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+  .broke{ color:var(--break); text-decoration:line-through; text-decoration-thickness:1px; }
+
+  .act{ margin-top:22px; padding-top:18px; border-top:1px solid var(--line); }
+  button{
+    font-family:var(--f-got); font-size:13px; font-weight:600; cursor:pointer;
+    background:transparent; border:1px solid currentColor; padding:9px 16px;
+    transition:background .16s,color .16s;
+  }
+  .card.ai button{ color:var(--cold); }
+  .card.ai button:hover{ background:var(--cold); color:var(--bg); }
+  .card.me button{ color:var(--brass); }
+  .card.me button:hover{ background:var(--brass); color:var(--bg); }
+  button:focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+  .say{ margin-top:14px; font-size:13px; line-height:1.8; min-height:3.2em; }
+  .card.ai .say{ color:var(--cold); }
+  .card.me .say{ color:var(--warm-dim); }
+  .say strong{ color:var(--warm); }
+  .card.me .say strong.bad{ color:var(--break); }
+
+  /* ══ 3つの手 ══ */
+  .moves{ margin-top:52px; border-top:1px solid var(--line); }
+  .moves li{
+    list-style:none; display:grid; gap:6px 22px; padding:24px 0; border-bottom:1px solid var(--line);
+  }
+  @media(min-width:700px){ .moves li{ grid-template-columns:52px 1fr; } }
+  .moves .n{ font-family:var(--f-mono); font-size:11px; color:var(--brass); padding-top:7px; letter-spacing:.1em; }
+  .moves h3{ font-family:var(--f-min); font-size:18px; font-weight:600; margin-bottom:4px; }
+  .moves p{ color:var(--warm-dim); font-size:14.5px; }
+
+  /* ══ 台本 ══ */
+  .script{ border:1px solid var(--line); background:var(--bg-up); }
+  .row{ display:grid; border-bottom:1px solid var(--line); }
+  @media(min-width:800px){ .row{ grid-template-columns:180px 1fr; } }
   .row:last-child{ border-bottom:0; }
   .cue{
-    padding:22px 18px; border-right:1px solid var(--rule);
-    font-family:var(--f-mono); font-size:11px; line-height:1.8; color:var(--faint);
-    background:var(--paper);
+    padding:26px 20px; font-family:var(--f-mono); font-size:11px; line-height:1.9; color:var(--cold);
+    border-right:1px solid var(--line); background:var(--bg);
   }
-  .cue .t{ color:var(--accent); display:block; margin-bottom:6px; letter-spacing:.06em; }
-  .line{ padding:22px 26px; font-family:var(--f-mincho); font-size:16px; line-height:2.1; }
-  .line p{ margin-bottom:14px; }
-  .line .hit{ font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums; color:var(--accent); font-size:17px; }
-  .line .flip{ color:var(--soft); }
-  @media(max-width:719px){
-    .cue{ border-right:0; border-bottom:1px solid var(--rule); padding:14px 18px; }
-  }
+  .cue b{ display:block; color:var(--brass); font-weight:400; letter-spacing:.1em; margin-bottom:10px; }
+  .cue span{ display:block; color:var(--cold-dim); margin-top:12px; }
+  .line{ padding:26px 30px; font-family:var(--f-min); font-size:16.5px; line-height:2.15; }
+  .line p{ margin-bottom:16px; }
+  .line p:last-child{ margin-bottom:0; }
+  .line .flip{ color:var(--warm-dim); }
+  .line b{ color:var(--warm); font-weight:600; }
+  @media(max-width:799px){ .cue{ border-right:0; border-bottom:1px solid var(--line); padding:16px 20px; } }
 
-  /* ── リサーチ表 ── */
-  .scroll{ overflow-x:auto; border:1px solid var(--rule); }
-  table{ border-collapse:collapse; width:100%; min-width:600px; background:var(--card); }
-  th,td{ padding:12px 16px; text-align:left; border-bottom:1px solid var(--rule); font-size:13.5px; vertical-align:top; }
-  th{
-    font-family:var(--f-mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--faint); font-weight:400; background:var(--paper); white-space:nowrap;
-  }
-  td.n{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; color:var(--accent); white-space:nowrap; }
+  /* ══ 表 ══ */
+  .scroll{ overflow-x:auto; border:1px solid var(--line); }
+  table{ border-collapse:collapse; width:100%; min-width:600px; background:var(--bg-up); }
+  th,td{ padding:14px 18px; text-align:left; border-bottom:1px solid var(--line); font-size:13.5px; vertical-align:top; }
+  th{ font-family:var(--f-mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--cold); font-weight:400; white-space:nowrap; }
+  td.p{ font-family:var(--f-mono); color:var(--brass); font-variant-numeric:tabular-nums; white-space:nowrap; }
   tr:last-child td{ border-bottom:0; }
-  .rules{ margin-top:20px; font-size:13.5px; color:var(--soft); }
-  .rules li{ list-style:none; padding-left:20px; position:relative; margin-bottom:8px; }
-  .rules li::before{ content:"—"; position:absolute; left:0; color:var(--accent); font-family:var(--f-mono); }
+  .rules{ margin-top:26px; }
+  .rules li{ list-style:none; padding-left:22px; position:relative; color:var(--warm-dim); font-size:14px; margin-bottom:10px; }
+  .rules li::before{ content:"—"; position:absolute; left:0; color:var(--brass); font-family:var(--f-mono); }
 
-  /* ── フッタ ── */
-  .who{ margin-top:88px; padding-top:36px; border-top:1px solid var(--ink); }
-  .who h3{ font-family:var(--f-mincho); font-size:19px; font-weight:600; margin-bottom:18px; }
-  .who p{ font-size:14.5px; color:var(--soft); max-width:62ch; }
-  .who a{ color:var(--accent); text-underline-offset:3px; }
-  .links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+  /* ══ 自己紹介 ══ */
+  .me-box p{ color:var(--warm-dim); font-size:15px; max-width:60ch; margin-bottom:18px; }
+  .me-box strong{ color:var(--warm); }
+  .links{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
   .links a{
-    font-family:var(--f-mono); font-size:12px; letter-spacing:.04em;
-    border:1px solid var(--rule); padding:9px 14px; text-decoration:none;
-    color:var(--ink); transition:border-color .15s,color .15s;
+    font-family:var(--f-mono); font-size:12px; letter-spacing:.06em; text-decoration:none;
+    color:var(--warm); border:1px solid var(--line); padding:11px 16px;
+    transition:border-color .16s,color .16s;
   }
-  .links a:hover{ border-color:var(--accent); color:var(--accent); }
-  a:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
-  .fine{ margin-top:32px; font-size:12px; color:var(--faint); line-height:1.8; }
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto; } }
+  .links a:hover{ border-color:var(--brass); color:var(--brass); }
+  .links a:focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+  .fine{
+    margin-top:44px; padding-top:24px; border-top:1px solid var(--line-soft);
+    font-size:12.5px; line-height:1.9; color:var(--cold);
+  }
+  .fine b{ color:var(--warm-dim); font-weight:600; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .dead li,.verdict,.hero .job{ opacity:1; transform:none; }
+  }
 </style>
 </head>
 <body>
-<div class="sheet">
-  <div class="ruler"></div>
+<div class="wrap">
 
-  <span class="tag">台本サンプル ／ 100均レビュー動画</span>
+  <!-- ═══ HERO ═══ -->
+  <header class="hero">
+    <p class="kicker">台本サンプル ／ 100均レビュー動画</p>
 
-  <h1>「便利です」を、<br>数字に置き換える仕事です。</h1>
-  <p class="thesis">AIの下書きが伝わらないのには、理由があります。AIは平均的な言い方しか書けないので、必ず「便利です」「ぜひチェックしてみてください」に落ちる。<b>どの商品でも成立する文章は、どの商品も売れない文章です。</b>直す方法は1つ、その商品にしかない具体を入れること。実物でお見せします。</p>
+    <ul class="dead">
+      <li>「とても便利です。」</li>
+      <li>「サイズもちょうどよくて、いろいろ使えます。」</li>
+      <li>「気になった方は、ぜひチェックしてみてください。」</li>
+    </ul>
 
-  <div class="measure">
-    <span class="big">20.2</span><span class="unit">cm</span>
-    <p class="say">この数字にピンと来た人は、たぶん一回失敗してます。<br><b>シンク下で、扉が閉まらなかった人です。</b></p>
-  </div>
+    <p class="verdict"><em>この3行は、どの商品にも使えます。</em><br>だから、どの商品も売れません。</p>
 
+    <p class="job">AIに書かせると、必ずここへ落ちます。悪い文章だからではなく、<strong style="color:var(--warm)">平均的すぎるから</strong>です。台本の仕事は、この3行を消すことだと思っています。証明します。</p>
+  </header>
+
+  <!-- ═══ 01 実演 ═══ -->
   <section>
-    <h2><span class="idx">01</span>同じ商品を、2通りで書きました</h2>
-    <p style="color:var(--soft);font-size:14.5px">商品：ダイソー クローゼット収納ケース（新サイズ・奥行20.2cm）</p>
+    <div class="h"><span class="idx">01</span><h2>この文章、商品を貼り替えても成立します。</h2></div>
+    <p class="sub">左がAIの下書き。ボタンを押すと、商品名だけを別のものに入れ替えます。<strong style="color:var(--warm)">それでも文章が壊れないことを、見てください。</strong>——壊れないということは、その商品について何も言っていない、ということです。</p>
 
-    <div class="ba">
-      <div class="b">
-        <div class="lab">AIの下書き</div>
-        <div class="txt">今日はダイソーのおすすめ収納グッズをご紹介します。こちらのクローゼット収納ケース、とても便利なんです。サイズもちょうどよく、いろいろな場所で使えます。お値段もお手頃なので、気になった方はぜひチェックしてみてください！</div>
-        <div class="verdict">書いてあることは全部本当。でも<strong>どの収納ケースにも当てはまる</strong>。「便利」「ちょうどいい」「いろいろ」——視聴者の頭に何も残らず、スクロールされて終わる。</div>
-      </div>
-      <div class="a">
-        <div class="lab">仕上げ後</div>
-        <div class="txt"><b>奥行、20.2センチ。</b>
+    <div class="demo">
+
+      <article class="card ai">
+        <div class="tag">AIの下書き</div>
+        <div class="body">
+          今日はダイソーの<span class="slot" id="aiName">クローゼット収納ケース</span>をご紹介します。<br>
+          これ、とても便利なんです。サイズもちょうどよく、いろいろな場所で使えます。<br>
+          毎日の暮らしがぐっと快適になりますよ。<br>
+          お値段もお手頃なので、気になった方はぜひチェックしてみてください！
+        </div>
+        <div class="act">
+          <button id="swapAI" type="button">商品を貼り替える →</button>
+          <p class="say" id="sayAI">まだ意味が通ります。<strong>通ってしまうのが、問題です。</strong></p>
+        </div>
+      </article>
+
+      <article class="card me">
+        <div class="tag">書き直したもの</div>
+        <div class="body" id="meBody">奥行、<span class="num">20.2</span>センチ。
 
 この数字にピンと来た人は、たぶん一回失敗してます。
 
-シンク下に収納ケースを入れようとして、扉が閉まらなかったこと、ありませんか。
-普通のクローゼット収納って、奥行40センチくらいあるんですよ。深いところ用なので。
+シンク下に<span class="slot" id="meName">収納ケース</span>を入れようとして、扉が閉まらなかったこと、ありませんか。
+普通のやつ、奥行<span class="num">40</span>センチくらいあるんですよ。深いところ用なので。
 
 これ、その半分です。
 
-何が変わるかというと、「浅い棚」に入る。
-シンク下、洗面台の下、押入れの手前半分。
-今まで奥行が足りなくて諦めてた場所が、全部収納に変わります。
+「浅い棚」に入る。シンク下、洗面台の下、押入れの手前半分。
+奥行が足りなくて諦めてた場所が、全部収納に変わります。
 
-……逆に言うと、深いクローゼットには向いてません。
-奥がスカスカになって、結局もう1個買うことになります。そこは正直に言っておきます。
-
+……逆に、深いクローゼットには向いてません。奥がスカスカになります。
 「浅い場所に困ってる人」だけ、買ってください。</div>
-      </div>
+        <div class="act">
+          <button id="swapME" type="button">同じことをしてみる →</button>
+          <p class="say" id="sayME">こちらは、貼り替えられません。試してみてください。</p>
+        </div>
+      </article>
+
     </div>
 
     <ul class="moves">
-      <li><span class="n">01</span><span><b>数字を先頭に置く。</b>「ちょうどいい」という感想を、20.2cmという検証できる事実に置き換える。</span></li>
-      <li><span class="n">02</span><span><b>失敗を書く。</b>扉が閉まらない——視聴者が「それ俺だ」と思う瞬間を作る。ここで初めて自分ごとになる。</span></li>
-      <li><span class="n">03</span><span><b>向いていない人を書く。</b>これが一番効きます。欠点を言うチャンネルは信用される。全部おすすめすると、全部信用されなくなる。</span></li>
+      <li>
+        <span class="n">01</span>
+        <div><h3>数字を、先に出す。</h3><p>「ちょうどいいサイズ」は感想です。「奥行20.2センチ」は事実です。視聴者は、事実にしか反応しません。</p></div>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <div><h3>失敗から入る。</h3><p>「扉が閉まらなかったこと、ありませんか」——ここで初めて、視聴者の話になります。商品の話をしている限り、他人事のままです。</p></div>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <div><h3>向いていない人を、言う。</h3><p>これが一番効きます。「深いクローゼットには向いてません」と言えるチャンネルは、信用されます。全部おすすめすると、全部信用されなくなります。</p></div>
+      </li>
     </ul>
   </section>
 
+  <!-- ═══ 02 台本 ═══ -->
   <section>
-    <h2><span class="idx">02</span>完成台本（ダイソー3点・そのまま撮れる形）</h2>
+    <div class="h"><span class="idx">02</span><h2>完成台本（ダイソー3点・そのまま撮れる形）</h2></div>
+    <p class="sub">1本ぶんの構成を、実際に書きました。左が画面指示、右がセリフです。</p>
 
     <div class="script">
       <div class="row">
-        <div class="cue"><span class="t">冒頭 15s</span>〔つかみ〕</div>
+        <div class="cue"><b>冒頭 ／ 15s</b>つかみ<span>〔商品を並べて置く〕</span></div>
         <div class="line">
-          <p>100均で収納買って、<strong>帰ってから入らなかった</strong>こと、ありますよね。</p>
+          <p>100均で収納買って、<b>帰ってから入らなかった</b>こと、ありますよね。</p>
           <p>サイズを測ったつもりが、扉のぶんを忘れてた。奥行が5センチ足りなかった。あの、袋から出して「あっ」ってなる瞬間。</p>
           <p>今日は、その「あっ」を消してくれるダイソーのグッズを3つ。全部、値段と実測サイズを出しながら話します。</p>
         </div>
       </div>
 
       <div class="row">
-        <div class="cue"><span class="t">1品目</span>クローゼット<br>収納ケース<br><br>〔手に持って、奥行を定規で見せる〕<br><br>〔シンク下に入れるカット〕</div>
+        <div class="cue"><b>1品目</b>クローゼット収納ケース<span>〔奥行を定規で見せる〕</span><span>〔シンク下に入れる〕</span></div>
         <div class="line">
-          <p><span class="hit">奥行、20.2センチ。</span></p>
+          <p><span class="num" style="font-size:19px">奥行、20.2センチ。</span></p>
           <p>普通のクローゼット収納って、奥行40センチくらいあるんです。深い場所用なので。これ、その半分。</p>
-          <p>何が変わるか。<strong>「浅い棚」に入るんです。</strong>シンク下、洗面台の下、押入れの手前半分。今まで「奥行が足りない」で諦めてた場所が、全部使えるようになる。</p>
-          <p class="flip">……逆に、深いクローゼットには向いてません。奥がスカスカになります。<strong>「浅い場所に困ってる人」だけ、買ってください。</strong></p>
+          <p>何が変わるか。<b>「浅い棚」に入るんです。</b>シンク下、洗面台の下、押入れの手前半分。今まで「奥行が足りない」で諦めてた場所が、全部使えるようになる。</p>
+          <p class="flip">……逆に、深いクローゼットには向いてません。奥がスカスカになります。<b>「浅い場所に困ってる人」だけ、買ってください。</b></p>
         </div>
       </div>
 
       <div class="row">
-        <div class="cue"><span class="t">2品目</span>電子レンジ<br>調理器（目玉焼き）<br><br>〔卵を割り入れて、レンジへ〕<br><br>〔チンして開ける〕</div>
+        <div class="cue"><b>2品目</b>電子レンジ調理器<br>（目玉焼き）<span>〔卵を割り入れる〕</span><span>〔チンして開ける〕</span></div>
         <div class="line">
-          <p><span class="hit">110円。500Wで、約60秒。</span></p>
+          <p><span class="num" style="font-size:19px">110円。500Wで、約60秒。</span></p>
           <p>朝、フライパン出して、油ひいて、焼いて、洗う。あれ、トータルで何分かかってると思います？</p>
-          <p>これ、<strong>洗い物がこれ1個</strong>です。</p>
-          <p class="flip">……正直に言うと、フライパンで焼いた目玉焼きのほうがおいしいです。縁のカリカリは出ません。</p>
-          <p>でも平日の朝7時、それ求めてます？「1分で、洗い物1個」のほうが勝ってる朝って、あると思うんですよ。</p>
+          <p>これ、<b>洗い物がこれ1個</b>です。</p>
+          <p class="flip">……正直に言うと、フライパンで焼いたほうがおいしいです。縁のカリカリは出ません。</p>
+          <p>でも平日の朝7時、それ求めてます？<b>「1分で、洗い物1個」のほうが勝ってる朝</b>って、あると思うんですよ。</p>
         </div>
       </div>
 
       <div class="row">
-        <div class="cue"><span class="t">3品目</span>2IN1車載<br>ドリンクホルダー<br><br>〔紙コップ → カップ麺の順に置く〕<br><br>〔広げるカット〕</div>
+        <div class="cue"><b>3品目</b>2IN1車載<br>ドリンクホルダー<span>〔紙コップを置く〕</span><span>〔広げて、カップ麺を置く〕</span></div>
         <div class="line">
-          <p>330円。100円じゃないです。<strong>330円</strong>。でもこれ、開くんですよ。</p>
-          <p>最大で、<span class="hit">直径 約150ミリ</span>まで。何が入るかというと——<strong>カップ麺が入ります。</strong></p>
-          <p>コンビニの紙コップコーヒーも、タンブラーも、カップ麺も、全部1個で受ける。車で仮眠する人、長距離運転する人、車中泊やる人。「ドリンクホルダーが小さくて入らない」って、地味に毎回イラッとするやつです。</p>
+          <p>330円。100円じゃないです。<b>330円</b>。……でもこれ、開くんですよ。</p>
+          <p>最大で、<span class="num" style="font-size:19px">直径 約150ミリ</span>まで。何が入るかというと——<b>カップ麺が入ります。</b></p>
+          <p>コンビニの紙コップも、タンブラーも、カップ麺も、全部1個で受ける。車で仮眠する人、長距離運転する人、車中泊やる人。「ドリンクホルダーが小さくて入らない」って、地味に毎回イラッとするやつです。</p>
           <p>あれが、330円で終わります。</p>
         </div>
       </div>
 
       <div class="row">
-        <div class="cue"><span class="t">締め 20s</span>〔3点を並べて〕</div>
+        <div class="cue"><b>締め ／ 20s</b>まとめ<span>〔3点を並べる〕</span></div>
         <div class="line">
-          <p>今日の3つ、共通してるのは<strong>「サイズで失敗した経験がある人ほど刺さる」</strong>ってところです。</p>
-          <p>・奥行20.2センチ ＝ 浅い棚に入る<br>・110円 ＝ 60秒、洗い物1個<br>・330円 ＝ 直径150ミリ、カップ麺が入る</p>
+          <p>今日の3つ、共通してるのは<b>「サイズで失敗した経験がある人ほど刺さる」</b>ってところです。</p>
+          <p><span class="num">20.2cm</span>＝浅い棚に入る<br><span class="num">60秒</span>＝洗い物1個<br><span class="num">150mm</span>＝カップ麺が入る</p>
           <p>数字で覚えて帰ってください。売り場で迷わなくなります。</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ═══ 03 リサーチ ═══ -->
   <section>
-    <h2><span class="idx">03</span>商品リサーチ（ご依頼①を、実際にやりました）</h2>
-    <p style="color:var(--soft);font-size:14.5px">1本あたり6〜8商品ぶん。台本のフックになる「数字」が取れる記事だけを拾っています。</p>
+    <div class="h"><span class="idx">03</span><h2>商品リサーチ（ご依頼①も、実際にやりました）</h2></div>
+    <p class="sub">1本あたり6〜8商品ぶん。<strong style="color:var(--warm)">台本のフックになる「数字」が取れる記事だけ</strong>を拾います。数字のない記事は、台本の材料になりません。</p>
 
     <div class="scroll">
       <table>
-        <thead><tr><th>#</th><th>商品</th><th>店</th><th>価格</th><th>台本フック（＝数字）</th></tr></thead>
+        <thead><tr><th>#</th><th>商品</th><th>店</th><th>価格</th><th>フック（＝台本の入口になる数字）</th></tr></thead>
         <tbody>
-          <tr><td class="n">1</td><td>クローゼット収納ケース（新サイズ）</td><td>ダイソー</td><td class="n">—</td><td>奥行20.2cm＝従来品の約半分。浅い棚・シンク下に入る</td></tr>
-          <tr><td class="n">2</td><td>電子レンジ調理器（目玉焼き）</td><td>ダイソー</td><td class="n">110円</td><td>500Wで約60秒。洗い物が1個で済む</td></tr>
-          <tr><td class="n">3</td><td>2IN1車載ドリンクホルダー</td><td>ダイソー</td><td class="n">330円</td><td>最大直径約150mm。紙コップ〜カップ麺まで対応</td></tr>
-          <tr><td class="n">4</td><td>折りたたみ収納ボックス（前面扉つき）</td><td>ダイソー</td><td class="n">—</td><td>積んだまま中身が取り出せる。「見せる収納」向き</td></tr>
-          <tr><td class="n">5</td><td>仕分けポーチ（縦ポケット3列・半透明）</td><td>ダイソー</td><td class="n">110円</td><td>スライダー開閉。中身が透けて把握できる</td></tr>
-          <tr><td class="n">6</td><td>バスケット用仕切り（2個入）</td><td>セリア</td><td class="n">110円</td><td>既存のカゴを仕切って区分けできる</td></tr>
-          <tr><td class="n">7</td><td>配線カバー各種</td><td>セリア</td><td class="n">—</td><td>複数コードをまとめる／隠すタイプあり</td></tr>
+          <tr><td class="p">1</td><td>クローゼット収納ケース（新サイズ）</td><td>ダイソー</td><td class="p">—</td><td>奥行20.2cm＝従来品の約半分。浅い棚・シンク下に入る</td></tr>
+          <tr><td class="p">2</td><td>電子レンジ調理器（目玉焼き）</td><td>ダイソー</td><td class="p">110円</td><td>500Wで約60秒。洗い物が1個で済む</td></tr>
+          <tr><td class="p">3</td><td>2IN1車載ドリンクホルダー</td><td>ダイソー</td><td class="p">330円</td><td>最大直径約150mm。紙コップ〜カップ麺まで対応</td></tr>
+          <tr><td class="p">4</td><td>折りたたみ収納ボックス（前面扉つき）</td><td>ダイソー</td><td class="p">—</td><td>積んだまま中身が取り出せる＝「見せる収納」</td></tr>
+          <tr><td class="p">5</td><td>仕分けポーチ（縦ポケット3列・半透明）</td><td>ダイソー</td><td class="p">110円</td><td>スライダー開閉。中身が透けて把握できる</td></tr>
+          <tr><td class="p">6</td><td>バスケット用仕切り（2個入）</td><td>セリア</td><td class="p">110円</td><td>手持ちのカゴを、そのまま仕切れる</td></tr>
+          <tr><td class="p">7</td><td>配線カバー各種</td><td>セリア</td><td class="p">—</td><td>複数コードをまとめる／隠すタイプあり</td></tr>
         </tbody>
       </table>
     </div>
 
     <ul class="rules">
-      <li>予約サイト・アフィリエイト目的のまとめ記事は使いません（触っていない記事は、台本の材料になりません）</li>
-      <li>「価格・サイズ・実測値」が書かれた記事を優先します（フックは数字から作るので）</li>
+      <li>予約サイト・アフィリエイト目的のまとめ記事は使いません（触っていない人の記事は、台本の材料になりません）</li>
+      <li>「価格・サイズ・実測値」が載っている記事を優先します（フックは数字から作るので）</li>
       <li>記事が見つからない商品は、空欄にせず「記事なし」と書きます（黙って空欄にすると、探し忘れと区別がつかないので）</li>
     </ul>
   </section>
 
-  <div class="who">
-    <h3>荒川（Ara）</h3>
-    <p>普段はWebサービスを作っています。面接練習のAIアプリ、ゲーム向けの分析ツールなどを個人で開発・公開しています。文章も、そのプロダクトの説明や導線を自分で書いてきました。<strong style="color:var(--ink)">「読んだ人が動くかどうか」で書く</strong>、という一点は、台本もサービスも同じだと思っています。</p>
+  <!-- ═══ 04 自己紹介 ═══ -->
+  <section class="me-box">
+    <div class="h"><span class="idx">04</span><h2>荒川と申します。</h2></div>
+    <p>普段は、Webサービスを個人で作って公開しています。面接練習のAIアプリ、ゲーム向けの分析ツールなど。文章も、そのサービスの説明や導線を全部、自分で書いてきました。</p>
+    <p><strong>「読んだ人が、動くかどうか」でしか書きません。</strong>そこは、台本もサービスも同じだと思っています。</p>
+    <p>クラウドワークスでの実績は、まだありません。星の数で判断していただけないぶん、<strong>先に現物を作って持ってきました。</strong>1本目から使える品質かどうかは、上をご覧いただければ判断できると思います。</p>
+
     <div class="links">
       <a href="https://aulait1117-ux.github.io/portfolio/">ポートフォリオ</a>
       <a href="https://interview-assistant-frontend-gcgj.onrender.com">面接AI（公開中）</a>
     </div>
+
     <p class="fine">
-      ※ このページの商品情報は、Web上のレビュー記事をもとに構成したものです。私が実際に購入して試したものではありません。<strong>台本の書き方・構成をご覧いただくためのサンプル</strong>です。実際にお仕事をいただけたら、商品を触ったうえで書きます。<br>
-      ※ 価格・在庫は店舗により異なる場合があります。
+      <b>正直にお伝えすること。</b>このページの商品情報は、Web上のレビュー記事をもとに構成したものです。私が実際に購入して試したものではありません。<b>台本の書き方・構成をご覧いただくためのサンプル</b>です。お仕事をいただけたら、商品を触ったうえで書きます。<br>
+      価格・在庫は店舗により異なる場合があります。
     </p>
-  </div>
+  </section>
+
 </div>
+
+<script>
+(function(){
+  "use strict";
+
+  // 商品を貼り替えても、AIの文章は壊れない。壊れないことが問題である——を実演する。
+  var products = [
+    { ai:"クローゼット収納ケース", me:"収納ケース" },
+    { ai:"電子レンジ調理器",       me:"目玉焼き器" },
+    { ai:"2IN1車載ドリンクホルダー", me:"ドリンクホルダー" }
+  ];
+
+  var aiName = document.getElementById("aiName");
+  var meName = document.getElementById("meName");
+  var sayAI  = document.getElementById("sayAI");
+  var sayME  = document.getElementById("sayME");
+  var btnAI  = document.getElementById("swapAI");
+  var btnME  = document.getElementById("swapME");
+
+  var aiSays = [
+    "まだ意味が通ります。<strong>通ってしまうのが、問題です。</strong>",
+    "まだ通ります。目玉焼き器でも「サイズもちょうどよく」。",
+    "3つとも通りました。<strong>この文章は、何も言っていません。</strong>"
+  ];
+
+  var i = 0;
+  function bump(el){ el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap"); }
+
+  btnAI.addEventListener("click", function(){
+    i = (i + 1) % products.length;
+    aiName.textContent = products[i].ai;
+    bump(aiName);
+    sayAI.innerHTML = aiSays[i];
+    if (i === 0) { sayAI.innerHTML = aiSays[0]; }
+  });
+
+  // 書き直したほうは、貼り替えると壊れる。それが「その商品にしか使えない文章」の意味。
+  var broken = false;
+  btnME.addEventListener("click", function(){
+    broken = !broken;
+    if (broken) {
+      meName.textContent = "目玉焼き器";
+      meName.className = "slot broke";
+      bump(meName);
+      sayME.innerHTML = '<strong class="bad">壊れました。</strong>「シンク下に目玉焼き器を入れようとして、扉が閉まらなかった」——意味が通りません。<br>つまりこの文章は、<strong>この商品にしか使えない</strong>。それが、伝わる台本です。';
+      btnME.textContent = "元に戻す ←";
+    } else {
+      meName.textContent = "収納ケース";
+      meName.className = "slot";
+      bump(meName);
+      sayME.innerHTML = "こちらは、貼り替えられません。試してみてください。";
+      btnME.textContent = "同じことをしてみる →";
+    }
+  });
+})();
+</script>
 </body>
 </html>
